@@ -40,8 +40,11 @@ class _NewNoteState extends State<NewNote> {
           OutlinedButton.icon(
               onPressed: () async {
                 NoteModel nm = NoteModel(
-                    title: titleController.text, note: noteController.text);
+                    title: titleController.text,
+                    note: noteController.text,
+                    dateTime: DateTime.now().toString().split('.')[0]);
                 await nm.saveNote();
+                if (!context.mounted) return;
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.save),
