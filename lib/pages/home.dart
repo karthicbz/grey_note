@@ -8,15 +8,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool isSyncing = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Grey Notes'),
+        title: const Text('Grey Notes'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(context, '/new-note');
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
