@@ -9,14 +9,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<dynamic> allNotes = [];
+  List<NoteModel> allNotes = [];
   NoteModel nm = NoteModel();
+  // bool longPressed = false;
 
   Future<void> loadAllNotes() async {
     final data = await nm.getAllNotes();
     for (var d in data) {
+      NoteModel nm = NoteModel(
+          title: d.keys.first,
+          note: d.values.first[0],
+          dateTime: d.values.first[1],
+          isLongPressed: false);
       setState(() {
-        allNotes.add(d);
+        allNotes.add(nm);
       });
     }
   }
@@ -46,13 +52,37 @@ class _HomeState extends State<Home> {
                     style: const TextStyle(
                         fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),
-                  title: Text(
-                    allNotes[index].keys.first,
-                    style: const TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.w400),
-                  ),
-                  subtitle:
-                      Text('Created on: ${allNotes[index].values.first[1]}'),
+                  title: allNotes[index].isLongPressed
+                      ? Row(
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {}, child: const Text('Delete')),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    allNotes[index].isLongPressed = false;
+                                  });
+                                },
+                                child: const Text('Cancel'))
+                          ],
+                        )
+                      : Text(
+                          allNotes[index].title,
+                          style: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w400),
+                        ),
+                  subtitle: allNotes[index].isLongPressed
+                      ? Container()
+                      : Text('Created on: ${allNotes[index].dateTime}'),
+                  onLongPress: () {
+                    // print(allNotes[index].isLongPressed);
+                    setState(() {
+                      allNotes[index].isLongPressed = true;
+                    });
+                  },
                 ),
               ),
             );

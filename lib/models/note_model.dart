@@ -6,11 +6,34 @@ class NoteModel {
   final String? _title;
   final String? _note;
   final String? _dateTime;
+  bool? _isLongPressed;
 
-  NoteModel({String? title, String? note, String? dateTime})
+  NoteModel(
+      {String? title, String? note, String? dateTime, bool? isLongPressed})
       : _title = title,
         _note = note,
-        _dateTime = dateTime;
+        _dateTime = dateTime,
+        _isLongPressed = isLongPressed;
+
+  get title {
+    return _title;
+  }
+
+  get note {
+    return _note;
+  }
+
+  get dateTime {
+    return _dateTime;
+  }
+
+  bool get isLongPressed {
+    return _isLongPressed!;
+  }
+
+  set isLongPressed(bool val) {
+    _isLongPressed = val;
+  }
 
   Future<void> saveNote() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
