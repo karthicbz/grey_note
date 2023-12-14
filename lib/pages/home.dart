@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
+import 'package:grey_note/pages/view_note.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -82,6 +83,10 @@ class _HomeState extends State<Home> {
                     setState(() {
                       allNotes[index].isLongPressed = true;
                     });
+                  },
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ViewNote(note: allNotes[index])));
                   },
                 ),
               ),

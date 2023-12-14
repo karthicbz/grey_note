@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
 
-class NewNote extends StatefulWidget {
-  const NewNote({super.key});
+class ViewNote extends StatefulWidget {
+  final NoteModel? note;
+  const ViewNote({super.key, required this.note});
 
   @override
-  State<NewNote> createState() => _NewNoteState();
+  State<ViewNote> createState() => _ViewNoteState();
 }
 
-class _NewNoteState extends State<NewNote> {
+class _ViewNoteState extends State<ViewNote> {
+  // ViewNote vn = ViewNote();
   final titleController = TextEditingController();
   final noteController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // print(widget.note?.title);
+    titleController.text = widget.note?.title;
+    noteController.text = widget.note?.note;
     return Scaffold(
       appBar: AppBar(
         title: const Text("New Note"),
@@ -24,12 +35,6 @@ class _NewNoteState extends State<NewNote> {
               child: TextButton(
                 child: const Icon(Icons.done),
                 onPressed: () async {
-                  NoteModel nm = NoteModel(
-                      title: titleController.text,
-                      note: noteController.text,
-                      dateTime: DateTime.now().toString().split('.')[0]);
-                  await nm.saveNote();
-                  if (!context.mounted) return;
                   Navigator.pop(context);
                 },
               ))
