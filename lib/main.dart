@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grey_note/pages/home.dart';
 import 'package:grey_note/pages/new_note.dart';
 import 'package:grey_note/pages/settings_page.dart';
+import 'package:grey_note/providers/home_provider.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:grey_note/widgets/row_switch.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +17,14 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => SettingsProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => SettingsProvider()),
+        ChangeNotifierProvider(create: (context) => HomeProvider()),
+      ],
       child: MaterialApp(
         darkTheme: ThemeData.dark(useMaterial3: true),
         theme: ThemeData.light(useMaterial3: true),
-        home: const Home(),
+        home: Home(),
         routes: {
           "/new-note": (context) => const NewNote(),
           "/settings": (context) => const SettingsPage(),

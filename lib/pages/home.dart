@@ -2,43 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
 import 'package:grey_note/pages/settings_page.dart';
 import 'package:grey_note/pages/view_note.dart';
+import 'package:grey_note/providers/home_provider.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   const Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  List<NoteModel> allNotes = [];
-  NoteModel nm = NoteModel();
-
-  // bool longPressed = false;
-
-  Future<void> loadAllNotes() async {
-    final data = await nm.getAllNotes();
-    for (var d in data) {
-      NoteModel nm = NoteModel(
-          title: d.keys.first,
-          note: d.values.first[0],
-          dateTime: d.values.first[1],
-          isLongPressed: false);
-      setState(() {
-        allNotes.add(nm);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadAllNotes();
-  }
-
-  bool isSyncing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +37,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: ListView.builder(
-          itemCount: allNotes.length,
+          itemCount: context.watch<HomeProvider>().allNotes.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(4.0),
@@ -80,7 +49,10 @@ class _HomeState extends State<Home> {
                     style: const TextStyle(
                         fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),
-                  title: allNotes[index].isLongPressed
+                  title: context
+                          .watch<HomeProvider>()
+                          .allNotes[index]
+                          .isLongPressed
                       ? Row(
                           children: [
                             ElevatedButton(
@@ -90,30 +62,40 @@ class _HomeState extends State<Home> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
-                                  setState(() {
-                                    allNotes[index].isLongPressed = false;
-                                  });
+                                  context
+                                      .watch<HomeProvider>()
+                                      .allNotes[index]
+                                      .isLongPressed = false;
                                 },
                                 child: const Text('Cancel'))
                           ],
                         )
                       : Text(
-                          allNotes[index].title,
+                          context.watch<HomeProvider>().allNotes[index].title,
                           style: const TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.w400),
                         ),
-                  subtitle: allNotes[index].isLongPressed
+                  subtitle: context
+                          .watch<HomeProvider>()
+                          .allNotes[index]
+                          .isLongPressed
                       ? Container()
-                      : Text('Created on: ${allNotes[index].dateTime}'),
+                      : Text(
+                          'Created on: ${context.watch<HomeProvider>().allNotes[index].dateTime}'),
                   onLongPress: () {
                     // print(allNotes[index].isLongPressed);
-                    setState(() {
-                      allNotes[index].isLongPressed = true;
-                    });
+
+                    context
+                        .watch<HomeProvider>()
+                        .allNotes[index]
+                        .isLongPressed = true;
                   },
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewNote(note: allNotes[index])));
+                        builder: (context) => ViewNote(
+                            note: context
+                                .watch<HomeProvider>()
+                                .allNotes[index])));
                   },
                 ),
               ),
@@ -122,10 +104,9 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.pushNamed(context, '/new-note');
-          allNotes = [];
-          setState(() {
-            loadAllNotes();
-          });
+          if (!context.mounted) return;
+          context.read<HomeProvider>().allNotes = [];
+          context.read<HomeProvider>().initializeHomeCards();
         },
         child: const Icon(Icons.add),
       ),
