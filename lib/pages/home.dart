@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
+import 'package:grey_note/pages/settings_page.dart';
 import 'package:grey_note/pages/view_note.dart';
+import 'package:grey_note/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,6 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<NoteModel> allNotes = [];
   NoteModel nm = NoteModel();
+
   // bool longPressed = false;
 
   Future<void> loadAllNotes() async {
@@ -35,11 +39,33 @@ class _HomeState extends State<Home> {
   }
 
   bool isSyncing = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:
+          context.watch<SettingsProvider>().dark ? Colors.black : Colors.white,
       appBar: AppBar(
-        title: const Text('Grey Notes'),
+        backgroundColor: context.watch<SettingsProvider>().dark
+            ? Colors.black
+            : Colors.white,
+        title: Text(
+          'Grey Notes',
+          style: TextStyle(
+              color: context.watch<SettingsProvider>().dark
+                  ? Colors.white
+                  : Colors.black),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/settings');
+              },
+              icon: Icon(Icons.settings_outlined,
+                  color: context.watch<SettingsProvider>().dark
+                      ? Colors.white
+                      : Colors.black))
+        ],
       ),
       body: ListView.builder(
           itemCount: allNotes.length,
@@ -47,6 +73,7 @@ class _HomeState extends State<Home> {
             return Padding(
               padding: const EdgeInsets.all(4.0),
               child: Card(
+                color: Colors.blueGrey,
                 child: ListTile(
                   leading: Text(
                     (index + 1).toString(),
