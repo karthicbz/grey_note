@@ -5,6 +5,7 @@ import 'package:grey_note/pages/view_note.dart';
 import 'package:grey_note/providers/home_provider.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:lottie/lottie.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -36,71 +37,82 @@ class Home extends StatelessWidget {
                       : Colors.black))
         ],
       ),
-      body: ListView.builder(
-          itemCount: context.watch<HomeProvider>().allNotes.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Card(
-                color: Colors.blueGrey,
-                child: ListTile(
-                  leading: Text(
-                    (index + 1).toString(),
-                    style: const TextStyle(
-                        fontSize: 16.0, fontWeight: FontWeight.w400),
-                  ),
-                  title: context
-                          .watch<HomeProvider>()
-                          .allNotes[index]
-                          .isLongPressed
-                      ? Row(
-                          children: [
-                            ElevatedButton(
-                                onPressed: () {}, child: const Text('Delete')),
-                            const SizedBox(
-                              width: 10.0,
+      body: context.watch<HomeProvider>().allNotes.isNotEmpty
+          ? ListView.builder(
+              itemCount: context.watch<HomeProvider>().allNotes.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Card(
+                    color: Color(int.parse(
+                        context.watch<SettingsProvider>().homeCardsColor)),
+                    child: ListTile(
+                      leading: Text(
+                        (index + 1).toString(),
+                        style: const TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.w400),
+                      ),
+                      title: context
+                              .watch<HomeProvider>()
+                              .allNotes[index]
+                              .isLongPressed
+                          ? Row(
+                              children: [
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text('Delete')),
+                                const SizedBox(
+                                  width: 10.0,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      context
+                                          .watch<HomeProvider>()
+                                          .allNotes[index]
+                                          .isLongPressed = false;
+                                    },
+                                    child: const Text('Cancel'))
+                              ],
+                            )
+                          : Text(
+                              context
+                                  .watch<HomeProvider>()
+                                  .allNotes[index]
+                                  .title,
+                              style: const TextStyle(
+                                  fontSize: 18.0, fontWeight: FontWeight.w400),
                             ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  context
-                                      .watch<HomeProvider>()
-                                      .allNotes[index]
-                                      .isLongPressed = false;
-                                },
-                                child: const Text('Cancel'))
-                          ],
-                        )
-                      : Text(
-                          context.watch<HomeProvider>().allNotes[index].title,
-                          style: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w400),
-                        ),
-                  subtitle: context
-                          .watch<HomeProvider>()
-                          .allNotes[index]
-                          .isLongPressed
-                      ? Container()
-                      : Text(
-                          'Created on: ${context.watch<HomeProvider>().allNotes[index].dateTime}'),
-                  onLongPress: () {
-                    // print(allNotes[index].isLongPressed);
+                      subtitle: context
+                              .watch<HomeProvider>()
+                              .allNotes[index]
+                              .isLongPressed
+                          ? Container()
+                          : Text(
+                              'Created on: ${context.watch<HomeProvider>().allNotes[index].dateTime}'),
+                      onLongPress: () {
+                        // print(allNotes[index].isLongPressed);
 
-                    context
-                        .watch<HomeProvider>()
-                        .allNotes[index]
-                        .isLongPressed = true;
-                  },
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewNote(
-                            note: context
-                                .watch<HomeProvider>()
-                                .allNotes[index])));
-                  },
-                ),
+                        context
+                            .watch<HomeProvider>()
+                            .allNotes[index]
+                            .isLongPressed = true;
+                      },
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ViewNote(
+                                note: context
+                                    .watch<HomeProvider>()
+                                    .allNotes[index])));
+                      },
+                    ),
+                  ),
+                );
+              })
+          : Center(
+              child: LottieBuilder.asset(
+                'assets/animations/empty_list.json',
               ),
-            );
-          }),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.pushNamed(context, '/new-note');

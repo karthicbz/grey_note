@@ -1,39 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
+import 'package:grey_note/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 
-class ViewNote extends StatefulWidget {
+class ViewNote extends StatelessWidget {
   final NoteModel? note;
-  const ViewNote({super.key, required this.note});
 
-  @override
-  State<ViewNote> createState() => _ViewNoteState();
-}
+  ViewNote({super.key, required this.note});
 
-class _ViewNoteState extends State<ViewNote> {
   // ViewNote vn = ViewNote();
   final titleController = TextEditingController();
-  final noteController = TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  final noteController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     // print(widget.note?.title);
-    titleController.text = widget.note?.title;
-    noteController.text = widget.note?.note;
+    bool isDarkTheme = context.watch<SettingsProvider>().dark;
+    titleController.text = note?.title;
+    noteController.text = note?.note;
     return Scaffold(
+      backgroundColor: isDarkTheme ? Colors.black : Colors.white,
       appBar: AppBar(
-        title: const Text("New Note"),
+        backgroundColor: isDarkTheme ? Colors.black : Colors.white,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: isDarkTheme ? Colors.white : Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          "Edit Note",
+          style: TextStyle(color: isDarkTheme ? Colors.white : Colors.black),
+        ),
         centerTitle: true,
         actions: [
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
               child: TextButton(
-                child: const Icon(Icons.done),
+                child: Icon(Icons.done,
+                    color: isDarkTheme ? Colors.white : Colors.black),
                 onPressed: () async {
                   Navigator.pop(context);
                 },
@@ -45,7 +54,12 @@ class _ViewNoteState extends State<ViewNote> {
         child: Flex(direction: Axis.vertical, children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(hintText: "Title.."),
+            decoration: const InputDecoration(
+              hintText: "Title..",
+            ),
+            style: TextStyle(
+                color: isDarkTheme ? Colors.white : Colors.black,
+                fontSize: 18.0),
           ),
           const SizedBox(
             height: 20.0,
@@ -56,6 +70,9 @@ class _ViewNoteState extends State<ViewNote> {
             maxLines: null,
             decoration: const InputDecoration(
                 hintText: 'Your story...', border: InputBorder.none),
+            style: TextStyle(
+                color: isDarkTheme ? Colors.white : Colors.black,
+                fontSize: 18.0),
           ),
           const SizedBox(
             height: 20.0,

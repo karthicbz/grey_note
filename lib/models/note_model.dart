@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class NoteModel {
   final String? _title;
@@ -36,16 +37,17 @@ class NoteModel {
   }
 
   Future<void> saveNote() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getString('grey_note') != null) {
-      List<dynamic> data = jsonDecode(pref.getString('grey_note') ?? '');
+    var box = Hive.box('grey_notes');
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    if (box.get('notes') != null) {
+      List<dynamic> data = jsonDecode(box.get('notes') ?? '');
       data.add({
         _title: [_note, _dateTime]
       });
-      pref.setString('grey_note', jsonEncode(data));
+      box.put('notes', jsonEncode(data));
     } else {
-      pref.setString(
-          'grey_note',
+      box.put(
+          'notes',
           jsonEncode([
             {
               _title: [_note, _dateTime]
@@ -55,9 +57,12 @@ class NoteModel {
   }
 
   Future<List<dynamic>> getAllNotes() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getString('grey_note') != null) {
-      List<dynamic> data = jsonDecode(pref.getString('grey_note') ?? '');
+    var box = Hive.box('grey_notes');
+    // print(box.get('grey_notes'));
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    if (box.get('notes') != null) {
+      List<dynamic> data = jsonDecode(box.get('notes') ?? '');
+      // print(data);
       return data;
     } else {
       return [];

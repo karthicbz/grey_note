@@ -8,6 +8,8 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String dropDownValue =
+        context.watch<SettingsProvider>().homeCardsColor.toString();
     return Scaffold(
       backgroundColor:
           context.watch<SettingsProvider>().dark ? Colors.black : Colors.white,
@@ -31,9 +33,42 @@ class SettingsPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Flexible(
-            child: RowSwitch(switchText: 'Dark Theme').rowSwitch(context),
-          ),
+          RowSwitch(switchText: 'Dark Theme').rowSwitch(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Card Color',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      color: context.watch<SettingsProvider>().dark
+                          ? Colors.white
+                          : Colors.black),
+                ),
+                DropdownButton(
+                    value: dropDownValue,
+                    items: context
+                        .watch<SettingsProvider>()
+                        .colors
+                        .map((color) => DropdownMenuItem(
+                            value: color,
+                            child: CircleAvatar(
+                              backgroundColor: Color(int.parse(color)),
+                              radius: 12,
+                            )))
+                        .toList(),
+                    onChanged: (value) {
+                      // print(value);
+                      context
+                          .read<SettingsProvider>()
+                          .changeHomeCardColor(value.toString());
+                      // dropDownValue = context.watch<SettingsProvider>().homeCardsColor;
+                    })
+              ],
+            ),
+          )
         ],
       ),
     );

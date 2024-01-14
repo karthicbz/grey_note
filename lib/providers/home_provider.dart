@@ -11,6 +11,7 @@ class HomeProvider extends ChangeNotifier {
 
   void initializeHomeCards() async {
     final data = await nm.getAllNotes();
+    print(data);
     for (var d in data) {
       NoteModel nm = NoteModel(
           title: d.keys.first,
