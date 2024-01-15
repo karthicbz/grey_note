@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
+import 'package:grey_note/providers/home_provider.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +45,8 @@ class ViewNote extends StatelessWidget {
                 child: Icon(Icons.done,
                     color: isDarkTheme ? Colors.white : Colors.black),
                 onPressed: () async {
+                  context.read<HomeProvider>().editNote(
+                      note?.uuid, titleController.text, noteController.text);
                   Navigator.pop(context);
                 },
               ))

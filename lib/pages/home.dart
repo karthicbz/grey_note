@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
 import 'package:grey_note/pages/settings_page.dart';
@@ -59,7 +61,19 @@ class Home extends StatelessWidget {
                           ? Row(
                               children: [
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      context.read<HomeProvider>().deleteNote(
+                                          context
+                                              .read<HomeProvider>()
+                                              .allNotes[index]
+                                              .uuid);
+                                      context.read<HomeProvider>().allNotes =
+                                          [];
+                                      await Timer(Duration(seconds: 1), () {});
+                                      await context
+                                          .read<HomeProvider>()
+                                          .initializeHomeCards();
+                                    },
                                     child: const Text('Delete')),
                                 const SizedBox(
                                   width: 10.0,
@@ -67,8 +81,11 @@ class Home extends StatelessWidget {
                                 ElevatedButton(
                                     onPressed: () {
                                       context
-                                          .read<HomeProvider>().isCancelPressed(
-                                      context.read<HomeProvider>().allNotes[index].uuid);
+                                          .read<HomeProvider>()
+                                          .isCancelPressed(context
+                                              .read<HomeProvider>()
+                                              .allNotes[index]
+                                              .uuid);
                                     },
                                     child: const Text('Cancel'))
                               ],
@@ -94,12 +111,15 @@ class Home extends StatelessWidget {
                         context.read<HomeProvider>().isCardLongPressed(
                             context.read<HomeProvider>().allNotes[index].uuid);
                       },
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                      onTap: () async {
+                        await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ViewNote(
                                 note: context
                                     .watch<HomeProvider>()
                                     .allNotes[index])));
+                        if (!context.mounted) return;
+                        context.read<HomeProvider>().allNotes = [];
+                        context.read<HomeProvider>().initializeHomeCards();
                       },
                     ),
                   ),
