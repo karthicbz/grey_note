@@ -2,18 +2,21 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class NoteModel {
   final String? _title;
   final String? _note;
   final String? _dateTime;
+  final String? _uuid;
   bool? _isLongPressed;
 
   NoteModel(
-      {String? title, String? note, String? dateTime, bool? isLongPressed})
+      {String? title, String? note, String? dateTime, String? uuid, bool? isLongPressed})
       : _title = title,
         _note = note,
         _dateTime = dateTime,
+        _uuid = uuid,
         _isLongPressed = isLongPressed;
 
   get title {
@@ -22,6 +25,10 @@ class NoteModel {
 
   get note {
     return _note;
+  }
+
+  get uuid{
+    return _uuid;
   }
 
   get dateTime {
@@ -42,7 +49,7 @@ class NoteModel {
     if (box.get('notes') != null) {
       List<dynamic> data = jsonDecode(box.get('notes') ?? '');
       data.add({
-        _title: [_note, _dateTime]
+        _title: [_note, _uuid, _dateTime]
       });
       box.put('notes', jsonEncode(data));
     } else {
@@ -50,7 +57,7 @@ class NoteModel {
           'notes',
           jsonEncode([
             {
-              _title: [_note, _dateTime]
+              _title: [_note, _uuid, _dateTime]
             }
           ]));
     }
@@ -62,7 +69,7 @@ class NoteModel {
     // SharedPreferences pref = await SharedPreferences.getInstance();
     if (box.get('notes') != null) {
       List<dynamic> data = jsonDecode(box.get('notes') ?? '');
-      // print(data);
+      print(data);
       return data;
     } else {
       return [];

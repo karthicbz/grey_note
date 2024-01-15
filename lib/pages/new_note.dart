@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grey_note/models/note_model.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class NewNote extends StatefulWidget {
   const NewNote({super.key});
@@ -47,7 +48,9 @@ class _NewNoteState extends State<NewNote> {
                   NoteModel nm = NoteModel(
                       title: titleController.text,
                       note: noteController.text,
-                      dateTime: DateTime.now().toString().split('.')[0]);
+                      dateTime: DateTime.now().toString().split('.')[0],
+                    uuid: const Uuid().v4(),
+                  );
                   await nm.saveNote();
                   if (!context.mounted) return;
                   Navigator.pop(context);

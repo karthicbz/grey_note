@@ -67,9 +67,8 @@ class Home extends StatelessWidget {
                                 ElevatedButton(
                                     onPressed: () {
                                       context
-                                          .watch<HomeProvider>()
-                                          .allNotes[index]
-                                          .isLongPressed = false;
+                                          .read<HomeProvider>().isCancelPressed(
+                                      context.read<HomeProvider>().allNotes[index].uuid);
                                     },
                                     child: const Text('Cancel'))
                               ],
@@ -92,10 +91,8 @@ class Home extends StatelessWidget {
                       onLongPress: () {
                         // print(allNotes[index].isLongPressed);
 
-                        context
-                            .watch<HomeProvider>()
-                            .allNotes[index]
-                            .isLongPressed = true;
+                        context.read<HomeProvider>().isCardLongPressed(
+                            context.read<HomeProvider>().allNotes[index].uuid);
                       },
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
