@@ -2,16 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:grey_note/pages/home.dart';
+import 'package:grey_note/pages/nav_page.dart';
 import 'package:grey_note/pages/new_note.dart';
 import 'package:grey_note/pages/settings_page.dart';
 import 'package:grey_note/providers/home_provider.dart';
+import 'package:grey_note/providers/nav_provider.dart';
 import 'package:grey_note/providers/settings_provider.dart';
 import 'package:grey_note/widgets/row_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(appDocumentDirectory.path);
@@ -28,11 +30,12 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => SettingsProvider()),
         ChangeNotifierProvider(create: (context) => HomeProvider()),
+        ChangeNotifierProvider(create: (context)=>NavigationProvider()),
       ],
       child: MaterialApp(
         darkTheme: ThemeData.dark(useMaterial3: true),
         theme: ThemeData.light(useMaterial3: true),
-        home: Home(),
+        home: const NavPage(),
         routes: {
           "/new-note": (context) => const NewNote(),
           "/settings": (context) => const SettingsPage(),
