@@ -10,6 +10,8 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     String dropDownValue =
         context.watch<SettingsProvider>().homeCardsColor.toString();
+    Color textColor =
+        context.watch<SettingsProvider>().dark ? Colors.white : Colors.black;
     return Scaffold(
       backgroundColor:
           context.watch<SettingsProvider>().dark ? Colors.black : Colors.white,
@@ -22,10 +24,7 @@ class SettingsPage extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_ios)),
         title: Text(
           'Settings',
-          style: TextStyle(
-              color: context.watch<SettingsProvider>().dark
-                  ? Colors.white
-                  : Colors.black),
+          style: TextStyle(color: textColor),
         ),
         backgroundColor: context.watch<SettingsProvider>().dark
             ? Colors.black
@@ -41,11 +40,7 @@ class SettingsPage extends StatelessWidget {
               children: [
                 Text(
                   'Card Color',
-                  style: TextStyle(
-                      fontSize: 20.0,
-                      color: context.watch<SettingsProvider>().dark
-                          ? Colors.white
-                          : Colors.black),
+                  style: TextStyle(fontSize: 20.0, color: textColor),
                 ),
                 DropdownButton(
                     value: dropDownValue,
@@ -66,6 +61,39 @@ class SettingsPage extends StatelessWidget {
                           .changeHomeCardColor(value.toString());
                       // dropDownValue = context.watch<SettingsProvider>().homeCardsColor;
                     })
+              ],
+            ),
+          ),
+          SizedBox(
+            child: Container(
+              height: 1,
+              color: Colors.grey,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              // horizontal: 8.0,
+              vertical: 16.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ListTile(
+                  title: Text(
+                    'Setup Encryption',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  trailing: Text(
+                    'Not Complete',
+                    style: TextStyle(
+                      color: textColor,
+                    ),
+                  ),
+                )
               ],
             ),
           )

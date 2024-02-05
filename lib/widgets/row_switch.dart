@@ -23,6 +23,9 @@ class RowSwitch {
           ),
           Switch(
               value: context.watch<SettingsProvider>().dark,
+              activeColor: Color(
+                int.parse(context.watch<SettingsProvider>().homeCardsColor),
+              ),
               onChanged: (_) {
                 context.read<SettingsProvider>().enableDarkTheme();
               })

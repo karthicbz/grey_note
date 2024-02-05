@@ -12,7 +12,11 @@ class NoteModel {
   bool? _isLongPressed;
 
   NoteModel(
-      {String? title, String? note, String? dateTime, String? uuid, bool? isLongPressed})
+      {String? title,
+      String? note,
+      String? dateTime,
+      String? uuid,
+      bool? isLongPressed})
       : _title = title,
         _note = note,
         _dateTime = dateTime,
@@ -27,7 +31,7 @@ class NoteModel {
     return _note;
   }
 
-  get uuid{
+  get uuid {
     return _uuid;
   }
 

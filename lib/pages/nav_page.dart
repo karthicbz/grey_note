@@ -30,6 +30,7 @@ class NavPage extends StatelessWidget {
                 haptic: true,
                 padding: const EdgeInsets.only(
                   left: 90.0,
+                  right: 90.0,
                   bottom: 16.0,
                   top: 16.0,
                 ),
@@ -42,6 +43,7 @@ class NavPage extends StatelessWidget {
                 haptic: true,
                 padding: const EdgeInsets.only(
                   right: 90.0,
+                  left: 90.0,
                   bottom: 16.0,
                   top: 16.0,
                 ),
