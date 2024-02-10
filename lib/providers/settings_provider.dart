@@ -6,8 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class SettingsProvider extends ChangeNotifier {
   bool dark = false;
-  List<String> colors = ['0xff00BFA5', '0xff00B8D4', '0xff0091EA'];
-  String homeCardsColor = '0xff00BFA5';
+  List<String> colors = ['0xff00BFA5', '0xffec407a', '0xff0091EA', '0xffef5350', '0xff66bb6a'];
+  String homeCardsColor = '0xffef5350';
 
   SettingsProvider() {
     initializeSettings();

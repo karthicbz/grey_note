@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grey_note/providers/settings_provider.dart';
+import 'package:grey_note/widgets/list_tile.dart';
 import 'package:grey_note/widgets/row_switch.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,7 @@ class SettingsPage extends StatelessWidget {
         context.watch<SettingsProvider>().homeCardsColor.toString();
     Color textColor =
         context.watch<SettingsProvider>().dark ? Colors.white : Colors.black;
+    String listBackground = context.watch<SettingsProvider>().homeCardsColor;
     return Scaffold(
       backgroundColor:
           context.watch<SettingsProvider>().dark ? Colors.black : Colors.white,
@@ -78,22 +80,12 @@ class SettingsPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ListTile(
-                  title: Text(
-                    'Setup Encryption',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  trailing: Text(
-                    'Not Complete',
-                    style: TextStyle(
-                      color: textColor,
-                    ),
-                  ),
-                )
+                CustomListTile(
+                        titleText: 'Setup Encryption',
+                        trailingText: 'Not Complete',
+                        splashColor: listBackground,
+                        textColor: textColor)
+                    .listTile(),
               ],
             ),
           )
